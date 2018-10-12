@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Transformalize.Providers.SqlCe.Autofac</RootNamespace>
     <AssemblyName>Transformalize.Provider.SqlCe.Autofac</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,7 +45,7 @@
       <HintPath>..\..\packages\Cfg-NET.Shorthand.0.2.11\lib\portable-net45+win8+wpa81+wp8\Cfg.Net.Shorthand.dll</HintPath>
     </Reference>
     <Reference Include="CfgNet, Version=0.10.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cfg-NET.0.10.4\lib\net452\CfgNet.dll</HintPath>
+      <HintPath>..\..\packages\Cfg-NET.0.10.4\lib\net462\CfgNet.dll</HintPath>
     </Reference>
     <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Dapper.1.50.5\lib\net451\Dapper.dll</HintPath>
@@ -53,10 +54,14 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Transformalize, Version=0.3.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.0.3.8-beta\lib\net452\Transformalize.dll</HintPath>
+      <HintPath>..\..\packages\Transformalize.0.3.8-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
     <Reference Include="Transformalize.Container.Autofac, Version=0.3.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Transformalize.Container.Autofac.0.3.7-beta\lib\net452\Transformalize.Container.Autofac.dll</HintPath>
@@ -70,19 +75,30 @@
     <Compile Include="SqlCeModule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Transformalize.Provider.SqlCe\Transformalize.Provider.SqlCe.csproj">
       <Project>{4ed1e259-756a-40b8-9800-f563b59e0206}</Project>
       <Name>Transformalize.Provider.SqlCe</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set f="$(SolutionDir)..\Transformalize\Pipeline.Command\bin\x64\$(ConfigurationName)\plugins"
+    <PostBuildEvent>set f="$(SolutionDir)..\Transformalize\Pipeline.Command\bin\plugins"
 
-if exist %25f%25 copy /Y "$(TargetDir)*.*" "%25f%25"</PostBuildEvent>
+if exist %25f%25 copy /Y "$(TargetDir)Dapper.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)System.Data.SqlServerCe.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.SqlCe.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.SqlCe.Autofac.dll" "%25f%25"
+
+if exist %25f%25 copy /Y "$(TargetDir)msvcr90.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)sqlceca40.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)sqlcecompact40.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)sqlceer40EN.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)sqlceme40.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)sqlceqp40.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)sqlcese40.dll" "%25f%25"
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
