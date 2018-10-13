@@ -85,20 +85,20 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set f="$(SolutionDir)..\Transformalize\Pipeline.Command\bin\plugins"
+    <PostBuildEvent>set f="$(SolutionDir)..\Transformalize\Pipeline.Command\plugins"
 
 if exist %25f%25 copy /Y "$(TargetDir)Dapper.dll" "%25f%25"
 if exist %25f%25 copy /Y "$(TargetDir)System.Data.SqlServerCe.dll" "%25f%25"
 if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.SqlCe.dll" "%25f%25"
 if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.SqlCe.Autofac.dll" "%25f%25"
 
-if exist %25f%25 copy /Y "$(TargetDir)msvcr90.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)sqlceca40.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)sqlcecompact40.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)sqlceer40EN.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)sqlceme40.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)sqlceqp40.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)sqlcese40.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)x64\msvcr90.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)x64\sqlceca40.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)x64\sqlcecompact40.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)x64\sqlceer40EN.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)x64\sqlceme40.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)x64\sqlceqp40.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)x64\sqlcese40.dll" "%25f%25"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
