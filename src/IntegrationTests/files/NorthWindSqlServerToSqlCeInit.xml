@@ -1,7 +1,6 @@
 ﻿<add name="NorthWind" 
      flatten="true"
      mode="init"
-     environment="test"
      max-memory="52 mb">
 
   <connections>
