@@ -16,24 +16,25 @@
 // limitations under the License.
 #endregion
 
-using System.Linq;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using Transformalize.Configuration;
 using Transformalize.Containers.Autofac;
 using Transformalize.Contracts;
+using Transformalize.Providers.Ado.Autofac;
 using Transformalize.Providers.Bogus.Autofac;
 using Transformalize.Providers.Console;
 using Transformalize.Providers.SqlCe.Autofac;
 
 namespace IntegrationTests {
 
-    [TestClass]
-    public class Test {
+   [TestClass]
+   public class Test {
 
-        [TestMethod]
-        public void Write() {
-            const string xml = @"<add name='Bogus' mode='init' flatten='true'>
+      [TestMethod]
+      public void Write() {
+         const string xml = @"<add name='Bogus' mode='init'>
   <parameters>
     <add name='Size' type='int' value='1000' />
   </parameters>
@@ -53,54 +54,52 @@ namespace IntegrationTests {
     </add>
   </entities>
 </add>";
-            using (var outer = new ConfigurationContainer().CreateScope(xml)) {
-                using (var inner = new TestContainer(new BogusModule(), new SqlCeModule()).CreateScope(outer, new ConsoleLogger(LogLevel.Debug))) {
+         using (var outer = new ConfigurationContainer().CreateScope(xml)) {
+            var process = outer.Resolve<Process>();
+            using (var inner = new TestContainer(new BogusModule(), new SqlCeModule(), new AdoProviderModule()).CreateScope(process, new ConsoleLogger(LogLevel.Debug))) {
 
-                    var process = inner.Resolve<Process>();
+               var controller = inner.Resolve<IProcessController>();
+               controller.Execute();
 
-                    var controller = inner.Resolve<IProcessController>();
-                    controller.Execute();
-
-                    Assert.AreEqual(process.Entities.First().Inserts, (uint)1000);
-                }
+               Assert.AreEqual(process.Entities.First().Inserts, (uint)1000);
             }
-        }
+         }
+      }
 
-        [TestMethod]
-        public void Read() {
-            const string xml = @"<add name='Bogus'>
+      [TestMethod]
+      public void Read() {
+         const string xml = @"<add name='Bogus'>
   <connections>
     <add name='input' provider='sqlce' file='c:\temp\junk.sdf' />
     <add name='output' provider='internal' />
   </connections>
   <entities>
-    <add name='BogusFlat' alias='Contact' page='1' size='10'>
+    <add name='BogusContactTable' alias='Contact' page='1' size='10'>
       <order>
-        <add field='Identity' />
+        <add field='A5' />
       </order>
       <fields>
-        <add name='Identity' type='int' />
-        <add name='FirstName' />
-        <add name='LastName' />
-        <add name='Stars' type='byte' />
-        <add name='Reviewers' type='int' />
+        <add name='A5' alias='Identity' type='int' />
+        <add name='A6' alias='FirstName' />
+        <add name='A7' alias='LastName' />
+        <add name='A8' alias='Stars' type='byte' />
+        <add name='A9' alias='Reviewers' type='int' />
       </fields>
     </add>
   </entities>
 </add>";
-            using (var outer = new ConfigurationContainer().CreateScope(xml)) {
-                using (var inner = new TestContainer(new SqlCeModule()).CreateScope(outer, new ConsoleLogger(LogLevel.Debug))) {
+         using (var outer = new ConfigurationContainer().CreateScope(xml)) {
+            var process = outer.Resolve<Process>();
+            using (var inner = new TestContainer(new SqlCeModule()).CreateScope(process, new ConsoleLogger(LogLevel.Debug))) {
 
-                    var process = inner.Resolve<Process>();
+               var controller = inner.Resolve<IProcessController>();
+               controller.Execute();
+               var rows = process.Entities.First().Rows;
 
-                    var controller = inner.Resolve<IProcessController>();
-                    controller.Execute();
-                    var rows = process.Entities.First().Rows;
+               Assert.AreEqual(10, rows.Count);
 
-                    Assert.AreEqual(10, rows.Count);
-
-                }
             }
-        }
-    }
+         }
+      }
+   }
 }

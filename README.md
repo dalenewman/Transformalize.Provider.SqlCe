@@ -1,14 +1,13 @@
 ### Overview
 
-This adds a `SqlCe` provider to Transformalize using [Microsoft.SqlServer.Compact](https://www.nuget.org/packages/Microsoft.SqlServer.Compact).  It is a plug-in compatible with Transformalize 0.3.5-beta.
+This is a `SqlCe` provider for Transformalize using [Microsoft.SqlServer.Compact](https://www.nuget.org/packages/Microsoft.SqlServer.Compact).  
 
-Build the Autofac project and put it's output into Transformalize's *plugins* folder. You may need to copy the contents of the x86 or x64 to the root of the output.  You may 
-also need to install [Microsoft SQL Server Compact 4.0](https://www.microsoft.com/en-us/download/details.aspx?id=17876).
+It ships with Transformalize CLI.
 
 ### Write Usage
 
 ```xml
-<add name='Bogus' mode='init' flatten='true'>
+<add name='Bogus' mode='init' flatten='false'>
   <connections>
     <add name='input' provider='bogus' seed='1' />
     <add name='output' provider='sqlce' file='c:\temp\junk.sdf' />
@@ -32,26 +31,26 @@ This writes 1000 rows of bogus data to a SqlCe database.
 ### Read Usage
 
 ```xml
-<add name='BogusRead' read-only='true' >
+<add name='Bogus'>
   <connections>
     <add name='input' provider='sqlce' file='c:\temp\junk.sdf' />
+    <add name='output' provider='internal' />
   </connections>
   <entities>
-    <add name='BogusFlat' page='1' size='10'>
+    <add name='BogusContactTable' alias='Contact' page='1' size='10'>
       <order>
-        <add field='Identity' />
+        <add field='A5' />
       </order>
       <fields>
-        <add name='Identity' type='int' />
-        <add name='FirstName' />
-        <add name='LastName' />
-        <add name='Stars' type='byte' />
-        <add name='Reviewers' type='int' />
+        <add name='A5' alias='Identity' type='int' />
+        <add name='A6' alias='FirstName' />
+        <add name='A7' alias='LastName' />
+        <add name='A8' alias='Stars' type='byte' />
+        <add name='A9' alias='Reviewers' type='int' />
       </fields>
     </add>
   </entities>
-</add>
-```
+</add>```
 
 This reads 10 rows of bogus data from a SqlCe database:
 
