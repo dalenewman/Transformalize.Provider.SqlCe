@@ -54,9 +54,11 @@ namespace IntegrationTests {
     </add>
   </entities>
 </add>";
-         using (var outer = new ConfigurationContainer().CreateScope(xml)) {
+         var logger = new ConsoleLogger(LogLevel.Debug);
+
+         using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer(new BogusModule(), new SqlCeModule(), new AdoProviderModule()).CreateScope(process, new ConsoleLogger(LogLevel.Debug))) {
+            using (var inner = new Container(new BogusModule(), new SqlCeModule(), new AdoProviderModule()).CreateScope(process, logger)) {
 
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
@@ -88,9 +90,10 @@ namespace IntegrationTests {
     </add>
   </entities>
 </add>";
-         using (var outer = new ConfigurationContainer().CreateScope(xml)) {
+         var logger = new ConsoleLogger(LogLevel.Debug);
+         using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer(new SqlCeModule()).CreateScope(process, new ConsoleLogger(LogLevel.Debug))) {
+            using (var inner = new Container(new SqlCeModule()).CreateScope(process, logger)) {
 
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
