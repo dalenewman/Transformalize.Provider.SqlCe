@@ -22,12 +22,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Transformalize.Configuration;
 using Transformalize.Containers.Autofac;
 using Transformalize.Contracts;
-using Transformalize.Providers.Console;
+using Transformalize.Logging;
 using Transformalize.Providers.SqlCe;
 using Transformalize.Providers.SqlCe.Autofac;
 using Transformalize.Providers.SqlServer;
 using Transformalize.Providers.SqlServer.Autofac;
-using Transformalize.Transforms.CSharp.Autofac;
+using Transformalize.Transforms.Jint.Autofac;
 
 namespace IntegrationTests {
 
@@ -53,7 +53,7 @@ namespace IntegrationTests {
       //[Ignore]
       public void SqlCe_Integration() {
 
-         var logger = new ConsoleLogger(LogLevel.Debug);
+         var logger = new DebugLogger(LogLevel.Debug);
 
          // CORRECT DATA AND INITIAL LOAD
          using (var cn = new SqlServerConnectionFactory(InputConnection).GetConnection()) {
@@ -66,9 +66,9 @@ namespace IntegrationTests {
          }
 
          // RUN INIT AND TEST
-         using (var outer = new ConfigurationContainer(new CSharpModule()).CreateScope(TestFile + "?Mode=init", logger)) {
+         using (var outer = new ConfigurationContainer(new JintTransformModule()).CreateScope(TestFile + "?Mode=init", logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new Container(new CSharpModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new ConsoleLogger(LogLevel.Debug))) {
+            using (var inner = new Container(new JintTransformModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new DebugLogger(LogLevel.Debug))) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -81,9 +81,9 @@ namespace IntegrationTests {
          }
 
          // FIRST DELTA, NO CHANGES
-         using (var outer = new ConfigurationContainer(new CSharpModule()).CreateScope(TestFile, logger)) {
+         using (var outer = new ConfigurationContainer(new JintTransformModule()).CreateScope(TestFile, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new Container(new CSharpModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new ConsoleLogger(LogLevel.Debug))) {
+            using (var inner = new Container(new JintTransformModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new DebugLogger(LogLevel.Debug))) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -104,9 +104,9 @@ namespace IntegrationTests {
          }
 
          // RUN AND CHECK
-         using (var outer = new ConfigurationContainer(new CSharpModule()).CreateScope(TestFile, logger)) {
+         using (var outer = new ConfigurationContainer(new JintTransformModule()).CreateScope(TestFile, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new Container(new CSharpModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new ConsoleLogger(LogLevel.Debug))) {
+            using (var inner = new Container(new JintTransformModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new DebugLogger(LogLevel.Debug))) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -129,9 +129,9 @@ namespace IntegrationTests {
             Assert.AreEqual(1, cn.Execute("UPDATE Orders SET CustomerID = 'VICTE', Freight = 20.11 WHERE OrderId = 10254;"));
          }
 
-         using (var outer = new ConfigurationContainer(new CSharpModule()).CreateScope(TestFile, logger)) {
+         using (var outer = new ConfigurationContainer(new JintTransformModule()).CreateScope(TestFile, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new Container(new CSharpModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new ConsoleLogger(LogLevel.Debug))) {
+            using (var inner = new Container(new JintTransformModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new DebugLogger(LogLevel.Debug))) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
@@ -152,9 +152,9 @@ namespace IntegrationTests {
             Assert.AreEqual(1, cn.Execute("UPDATE Customers SET ContactName = 'Paul Ibsen' WHERE CustomerID = 'VAFFE';"));
          }
 
-         using (var outer = new ConfigurationContainer(new CSharpModule()).CreateScope(TestFile, logger)) {
+         using (var outer = new ConfigurationContainer(new JintTransformModule()).CreateScope(TestFile, logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new Container(new CSharpModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new ConsoleLogger(LogLevel.Debug))) {
+            using (var inner = new Container(new JintTransformModule(), new SqlServerModule(), new SqlCeModule()).CreateScope(process, new DebugLogger(LogLevel.Debug))) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }

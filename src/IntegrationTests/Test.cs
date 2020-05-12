@@ -22,9 +22,9 @@ using System.Linq;
 using Transformalize.Configuration;
 using Transformalize.Containers.Autofac;
 using Transformalize.Contracts;
+using Transformalize.Logging;
 using Transformalize.Providers.Ado.Autofac;
 using Transformalize.Providers.Bogus.Autofac;
-using Transformalize.Providers.Console;
 using Transformalize.Providers.SqlCe.Autofac;
 
 namespace IntegrationTests {
@@ -54,7 +54,7 @@ namespace IntegrationTests {
     </add>
   </entities>
 </add>";
-         var logger = new ConsoleLogger(LogLevel.Debug);
+         var logger = new DebugLogger(LogLevel.Debug);
 
          using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
             var process = outer.Resolve<Process>();
@@ -90,7 +90,7 @@ namespace IntegrationTests {
     </add>
   </entities>
 </add>";
-         var logger = new ConsoleLogger(LogLevel.Debug);
+         var logger = new DebugLogger(LogLevel.Debug);
          using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
             var process = outer.Resolve<Process>();
             using (var inner = new Container(new SqlCeModule()).CreateScope(process, logger)) {

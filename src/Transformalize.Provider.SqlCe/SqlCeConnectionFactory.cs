@@ -90,7 +90,9 @@ namespace Transformalize.Providers.SqlCe {
         private static char L { get; } = '[';
         private static char R { get; } = ']';
 
-        public string Enclose(string name) {
+      public bool SupportsLimit => false;
+
+      public string Enclose(string name) {
             return L + name + R;
         }
 
